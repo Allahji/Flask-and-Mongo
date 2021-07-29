@@ -3,7 +3,7 @@
 from flask import Flask
 from flask import render_template
 from flask import request
-# from flask_pymongo import PyMongo
+from flask_pymongo import PyMongo
 
 
 # -- Initialization section --
@@ -16,12 +16,12 @@ events = [
     ]
 
 # name of database
-# app.config['MONGO_DBNAME'] = 'database-name'
+app.config['MONGO_DBNAME'] = 'database1'
 
 # URI of database
-# app.config['MONGO_URI'] = 'mongo-uri'
+app.config['MONGO_URI'] = 'mongodb+srv://admin:hys3U6eF4yYpIN7c@cluster0.0bu5m.mongodb.net/database1?retryWrites=true&w=majority'
 
-# mongo = PyMongo(app)
+mongo = PyMongo(app)
 
 # -- Routes section --
 # INDEX
@@ -39,8 +39,16 @@ def index():
 
 def add():
     # connect to the database
+    user = mongo.db.users
 
     # insert new data
+    user.insert({"name": "allahji"})
 
     # return a message to the user
-    return ""
+    return "Added a new user"
+
+@app.route('/event')
+def event():
+    joy = mongo.db.users
+    users = joy.find({"name" : "allahji"})
+    return render_template("event.html", users = users)
